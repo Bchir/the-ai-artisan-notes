@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Tests Are Dead. (But Only If You Still Think a “Unit” Is a Method) | The AI Artisan Notes</title>
+  <meta name="description" content="Why AI code generation breaks method-level unit testing, how the test pyramid turns into a diamond, and why executable specs are the new source of truth.">
+  <link rel="canonical" href="https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:site_name" content="The AI Artisan Notes">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Unit Tests Are Dead. (But Only If You Still Think a “Unit” Is a Method)">
+  <meta property="og:description" content="Why AI code generation breaks method-level unit testing, how the test pyramid turns into a diamond, and why executable specs are the new source of truth.">
+  <meta property="og:url" content="https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html">
+  <meta property="article:published_time" content="2026-10-26T00:00:00+01:00">
+  <meta property="article:author" content="Mohamed Amine Bchir">
+  <meta property="article:tag" content="Architecture">
+  <meta property="article:tag" content="Testing">
+  <meta property="article:tag" content="AI Engineering">
+  <meta property="article:tag" content="Software Craftsmanship">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Unit Tests Are Dead. (But Only If You Still Think a “Unit” Is a Method)">
+  <meta name="twitter:description" content="Why AI code generation breaks method-level unit testing, how the test pyramid turns into a diamond, and why executable specs are the new source of truth.">
+
+  <!-- Feeds & Machine Readability -->
+  <link rel="alternate" type="application/rss+xml" title="The AI Artisan Notes RSS Feed" href="../feed.xml">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <!-- Structured Data (Schema.org TechArticle) -->
+  <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Unit Tests Are Dead. (But Only If You Still Think a \u201cUnit\u201d Is a Method)",
+    "description": "Why AI code generation breaks method-level unit testing, how the test pyramid turns into a diamond, and why executable specs are the new source of truth.",
+    "url": "https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html",
+    "datePublished": "2026-10-26T00:00:00+01:00",
+    "dateModified": "2026-10-26T00:00:00+01:00",
+    "author": {
+        "@type": "Person",
+        "name": "Mohamed Amine Bchir",
+        "url": "https://tn.linkedin.com/in/mohamed-amine-bchir",
+        "sameAs": [
+            "https://tn.linkedin.com/in/mohamed-amine-bchir",
+            "https://github.com/Bchir"
+        ]
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "The AI Artisan Notes",
+        "url": "https://bchir.github.io/the-ai-artisan-notes"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html"
+    },
+    "keywords": "Architecture, Testing, AI Engineering, Software Craftsmanship"
+}
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="site-nav">
+        <a href="../">&larr; The AI Artisan Notes</a>
+      </nav>
+      <h1 class="article-title">Unit Tests Are Dead. (But Only If You Still Think a “Unit” Is a Method)</h1>
+      <p class="article-subtitle">We’re not Java, .NET, or Node developers anymore. We’re spec developers, and our tests belong at the level of our new source code.</p>
+      <p class="article-meta">October 26, 2026 &bull; 15 min read &bull; By <a href="https://tn.linkedin.com/in/mohamed-amine-bchir" target="_blank" rel="noopener">Mohamed Amine Bchir</a></p>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="article-content">
+<div class="alert-note">
+<blockquote><strong>The Bottom Line (TL;DR)</strong>:</blockquote>
+<blockquote>In an AI-assisted codebase, traditional method-level unit tests fail because agents rewrite both the implementation and its assertions simultaneously, producing a false illusion of correctness. Sustainable reliability requires elevating the unit of testing from implementation methods to executable behavioral specifications and integration guardrails.</blockquote>
+<p>We asked an AI agent to refactor a piece of legacy code.</p>
+<p>It came back with changes everywhere. And here’s the catch: the code changed, and so did its unit tests. The agent rewrote them right alongside the implementation.</p>
+<p>Everything was green.</p>
+<p>We deployed. Then users told us the behavior had changed.</p>
+<p>Think about what that means. The tests that should have protected the old behavior were gone. They had been replaced by new tests that agreed with the new code. Green didn’t mean “nothing broke.” It meant “the code agrees with itself.”</p>
+<p>Then came the second problem: the review. The change was so big that I realized there was no way to review it the way we review code today. Line by line, file by file, test by test. Sometimes we never even got that far. The session ended, we looked at the diff, and the PR went in the trash, along with every token that paid for it.</p>
+<p>So what should a human review instead?</p>
+<p>Not every changed line. The <strong>behavior</strong>: a short set of scenarios, written in plain language, that says what the system must do. The agent can rewrite the code and the unit tests as much as it wants. The scenarios are what we own, and what we read.</p>
+<p>That’s when I started asking a different question: <strong>who is this process actually serving?</strong></p>
+<p>We automated the implementation, and we kept the verification rituals built for hand-written implementation. That’s bolting a jet engine onto a horse cart and wondering why the ride feels strange.</p>
+<p>So here’s my claim, and I’ll defend it for the next few minutes:</p>
+<p><strong>Unit tests aren’t dead because testing died. They’re dead because the unit moved.</strong></p>
+<h2>The unit moved</h2>
+<p>When was the last time you asked an AI agent for “a repository class with three methods”?</p>
+<p>You didn’t. You asked for a capability. <em>“Let customers reserve inventory.”</em></p>
+<p>The agent came back with a handler, a domain service, a repository, a validator, a few supporting classes, and a test file for each of them.</p>
+<p>You wanted one thing. You are now verifying forty.</p>
+<p>Now watch what happens next. You ask the agent to restructure the code. Same behavior, cleaner design. The agent refactors, and a dozen tests break.</p>
+<p>Nothing about the business changed. The tests broke anyway.</p>
+<p>Why? Because those tests were never testing the business. They were testing the <em>shape of the code</em>. Mocks wired to this exact method calling that exact repository.</p>
+<p>Here’s the sentence I want you to take away:</p>
+<p><strong>The unit of code is not the unit of behavior. And the unit of behavior should now be our default unit of verification.</strong></p>
+<p>I’m not saying delete every unit test. A tricky algorithm deserves dedicated tests. So does a security invariant. But a simple CRUD feature doesn’t need twenty tests guarding its private plumbing just because that’s what we’ve always done.</p>
+<p>Choose tests by risk. Not by ritual.</p>
+<h2>We’ve done this before</h2>
+<p>Remember writing assembly?</p>
+<p>Then higher-level languages arrived. We stopped thinking in registers and started expressing intent. Did we stop caring about correctness? No. We moved verification up to where intent lives.</p>
+<p>Today nobody writes a test to prove the compiler translated an <code>if</code> statement into the right machine instructions. We trust the layer below and verify what our application <em>does</em>.</p>
+<p>But wait. Here’s the sharpest objection you’ll hear:</p>
+<p><em>“A compiler is deterministic. An LLM is not. You trust the compiler because it’s reliable, not just because it’s an abstraction.”</em></p>
+<p>Correct. And that is exactly why my argument gets stronger, not weaker.</p>
+<p>If generated code cannot be trusted by construction, then the only layer we can trust is the one <strong>humans own and verify</strong>: the specification, and the behavioral tests that execute it.</p>
+<p>Generated code is a build artifact, like the bytecode or machine code your compiler produces. Disposable, regenerable, and inspected for risk, not admired for style.</p>
+<h2>You’re not a Java, .NET, or Node developer anymore</h2>
+<p>Say it with me. We are not Java developers. We are not .NET developers. We are not Node developers.</p>
+<p><strong>We are spec developers.</strong></p>
+<p>Our language is no longer Java, C#, or JavaScript. Our language is the specification: precise, versioned, reviewed, and executable. The code is what the compiler, or the agent, produces from it.</p>
+<p>Here’s the manifesto:</p>
+<ul>
+  <li><strong>Our source code is the spec.</strong></li>
+  <li><strong>Generated code is a build artifact.</strong></li>
+  <li><strong>We review intent, not implementation.</strong></li>
+  <li><strong>Tests are executable specifications, not mirrors of the code.</strong></li>
+</ul>
+<p>And before you call this a demotion, look at what the job now demands:</p>
+<ol>
+  <li><strong>Writing behavior so precisely that an agent can’t misread it.</strong> Ambiguity used to hide inside code. Now it shows up on the first run.</li>
+  <li><strong>Spotting the edge case nobody wrote down.</strong> The double submit. The partial failure. The duplicate message.</li>
+  <li><strong>Owning the invariants.</strong> The things that must stay true no matter how the code is rewritten.</li>
+</ol>
+<p>That isn’t less engineering. That’s the hardest part of engineering, finally getting the spotlight.</p>
+<h2>The pyramid was never a law</h2>
+<p>Every developer carries the same picture in their head. A wide base of unit tests. A smaller layer of integration tests. A tiny peak of end-to-end tests.</p>
+<p>The test pyramid.</p>
+<p>Now ask yourself where it came from. Was it derived from first principles? No. It was an <strong>economic argument</strong>.</p>
+<ul>
+  <li>Unit tests were cheap to write, fast to run, and precise to debug. So write lots of them.</li>
+  <li>End-to-end tests were expensive, slow, and flaky. So write few.</li>
+</ul>
+<p>The pyramid is a price list that got mistaken for a law of nature.</p>
+<p>So what happens when the prices change?</p>
+<ul>
+  <li><strong>Writing tests is cheaper, not free.</strong> The agent drafts them in seconds, though fixing a bad setup still takes human time.</li>
+  <li><strong>Reviewing implementation-coupled tests is.</strong> Every refactor rewrites assertions, and a human has to decide whether each change is legitimate or a quietly weakened test.</li>
+  <li><strong>Tests that survive refactors are now the cheapest confidence you can buy.</strong> A behavioral test doesn’t care if the agent used one class or ten.</li>
+  <li><strong>Observability erodes the diagnostic advantage</strong> that made unit tests so precise. More on that below.</li>
+</ul>
+<p>Change the inputs and the shape changes. The pyramid becomes a <strong>diamond</strong>: a thin base of unit tests for algorithms and security invariants, a wide middle of behavioral component tests, contract and performance tests around it, and a thin top of focused end-to-end journeys.</p>
+<p><em>[Diagram: the pyramid (thin E2E, integration, wide unit base) becomes a diamond: thin E2E at the top, performance and resilience tests, a wide middle of behavioral component tests, contract tests, and a thin unit-test base. Quality and security rules gate the whole thing.]</em></p>
+<p>I’m not the first to challenge the pyramid. The testing trophy and Spotify’s honeycomb made the case years ago, for human-written code. AI sharpens their argument: when agents rewrite the internals constantly, tests coupled to those internals become far more expensive to keep and review.</p>
+<h2>The review-fatigue machine</h2>
+<p>Picture a pull request from an AI agent.</p>
+<p>It generated the implementation. Then the tests. Then it found a failure, changed the code, and changed the tests to match. Then it refactored three classes, rewired the mocks, and updated the snapshots.</p>
+<p>Hundreds of lines of code. Hundreds more lines of tests.</p>
+<p>And a human is supposed to approve it.</p>
+<p>Here’s what actually happens at line 300. You stop reading and start scanning. At line 500, you’re looking for red flags instead of understanding the change. By the end, you click approve.</p>
+<p>That’s <strong>review fatigue</strong>.</p>
+<p>We made implementation cheap. We also made the material that needs verifying explode. Now every changed assertion forces the same question: is this a real behavior change, a harmless adaptation to the new structure, or a test that was quietly weakened to go green?</p>
+<p>The usual advice is smaller pull requests and better prompts. Worth doing. But it dodges the real question:</p>
+<p><strong>Why are we generating so much implementation-coupled verification in the first place?</strong></p>
+<p>The answer isn’t fewer tests everywhere. It’s a smarter place to point human attention:</p>
+<ol>
+  <li>Does the specification describe the <strong>right behavior</strong>?</li>
+  <li>Does the implementation introduce <strong>security, architectural, or operational risk</strong>?</li>
+  <li>Is the automated evidence <strong>enough</strong> to prove the requirements are met?</li>
+</ol>
+<p>The goal isn’t less oversight. It’s less <em>unnecessary</em> oversight.</p>
+<h3>The hidden bill</h3>
+<p>There’s a cost nobody counts, either. We obsess over token usage: smaller models, tighter prompts, leaner context.</p>
+<p>Meanwhile, a <a href="https://doi.org/10.1016/j.infsof.2014.06.009">2015 systematic mapping of test-code engineering</a> found test-to-production code ratios of roughly 0.1 to 1.6 in the 11 studies that reported them. At the high end, that’s more test code than production code, and your agent reads it again on every later change, every failure, every refactor.</p>
+<p>Tokens aren’t free either. Heavy agent use, with long sessions, parallel agents, and big refactors, can run far above any published average. And every token spent on a PR that gets thrown away is pure waste.</p>
+<p>That’s why developers are already fighting back with tools like <strong>RTK</strong>, <strong>Caveman</strong>, <strong>context-mode</strong>, <strong>mcp-compressor</strong>, <strong>code-review-graph</strong>, <strong>Headroom</strong>, and <strong>LLMLingua</strong>, plus the basics: prompt caching and cheaper models for simple tasks.</p>
+<p>Measure the savings on your own repo, with a tool like ccusage, and mind the ceiling: most agent bills are input tokens, and some of these tools only shrink output.</p>
+<p>Here’s the part no tool fixes. The cheapest token is the one you never generate. Fewer implementation-coupled tests means less code to write, read, rewrite, and review. Compression shrinks the bill. A better verification strategy shrinks the work.</p>
+<h2>The new default: test the capability</h2>
+<p>So what do we do instead? Five layers. Each answers a different question.</p>
+<h3>Layer 1: Behavioral component tests (the default)</h3>
+<p><em>Does this capability behave correctly through its real application boundary?</em></p>
+<p>This is where most default testing effort should go. Write behavior in plain language, with BDD (behavior-driven development) tools like Cucumber for Java and JavaScript, Reqnroll for .NET, or behave for Python:</p>
+<pre><code class="language-gherkin">
+Scenario: Reject a reservation exceeding available inventory
+  Given a product has 2 units available
+  When a customer attempts to reserve 3 units
+  Then the reservation is rejected
+  And the available inventory remains 2 units
+  And no reservation confirmation event is published
+</code></pre>
+<p>Read that again. It says nothing about handlers, repositories, or mocks.</p>
+<p>It defines a <strong>guarantee</strong>. The agent can rewrite the implementation from scratch, change the algorithm, reorganize every class, and this scenario still holds, as long as the behavior is right.</p>
+<p>And it is something a human can actually review. Is the rule correct? Is the edge case captured? Does the outcome match the real requirement?</p>
+<p>That’s a ten-second review of intent, instead of a ten-minute review of mocks.</p>
+<p>One caveat: the specification still needs people who understand the business. AI can write wrong specs as easily as wrong code. That’s why this is the artifact worth your full attention.</p>
+<p>And keep it practical. Use the real interface for the behavior under test, and use controlled fixtures for setup where it keeps tests simple and deterministic. The goal is to test the real capability, not to build an expensive end-to-end ceremony around every scenario.</p>
+<p>Your stack probably has a tool for this. <strong>Testcontainers</strong> (Java, Node, .NET, and more) and Docker Compose start your service with real databases and message brokers, and your test talks to it like a real client. The test only ever sees the service from the outside. It’s a <strong>black box</strong>, so it can’t couple itself to internal classes, even if the agent is tempted to. In .NET, <strong>Aspire</strong> does the same job.</p>
+<p>There’s a bonus. In .NET, Aspire exposes the running application’s logs, traces, and resource state to AI agents through its MCP server (MCP is a standard way for agents to use tools). Its test builder turns the dashboard off by default, but you can switch it on, so the same platform that runs the test can also help explain why it failed.</p>
+<h3>Layer 2: Contract tests</h3>
+<p><em>Does the capability agree with the contracts of its dependencies?</em></p>
+<p>This one matters even more with AI.</p>
+<p>An agent can build a perfectly consistent mock around a wrong assumption. It assumes the payment API returns a certain field. It assumes an event consumer accepts a certain schema version.</p>
+<p>The component test passes, because the mock agrees with the code. Production fails, because the assumption was wrong.</p>
+<p>Contract tests check those assumptions against independently defined interfaces: OpenAPI and consumer-provider verification for HTTP, event schemas and AsyncAPI for messaging. A schema proves structure, not meaning, so keep that distinction in mind.</p>
+<h3>Layer 3: Performance, resilience, and safe deployment</h3>
+<p><em>Does the capability meet its operational requirements, and can we ship it safely?</em></p>
+<p>Once behavior is pinned down, you can let the agent loose. New algorithm? Different caching? Smarter database access? Go ahead.</p>
+<p>But the implementation must still hit explicit targets for latency, throughput, resource use, and recovery from failure. Test against representative workloads, not isolated method timings. Run quick checks in CI and heavier load and soak tests in dedicated pipelines.</p>
+<p>Performance numbers are only half the story. A change can be fast and correct and still be dangerous to deploy. So add checks for <strong>deployability</strong>:</p>
+<ul>
+  <li><strong>Mixed-version compatibility (canary and rolling deploys).</strong> For a while, old and new versions run side by side against the same database, queues, and APIs. Test that they get along: migrations follow expand-then-contract, new events still parse in old consumers, and API changes don’t break old clients. Schema and API diff tools help here, such as oasdiff, buf breaking, and schema-registry compatibility modes.</li>
+  <li><strong>Rollback safety.</strong> After the migration has run, can you roll back without losing data?</li>
+  <li><strong>Failover behavior.</strong> In an active-passive setup, does the standby take over cleanly and handle in-flight requests? Kill the primary in a test and find out.</li>
+  <li><strong>Failure handling.</strong> Timeouts, retries, duplicate messages, partial outages. Chaos-style tests turn them from folklore into a failing build.</li>
+  <li><strong>Feature flags.</strong> Verify the change behaves correctly with the flag on and off.</li>
+</ul>
+<p>An agent won’t think about any of this unless it’s written down. So make these <strong>operational requirements in the spec</strong>: “must be safe to roll back,” “must tolerate a mixed-version window,” “must survive losing the primary.” Then the pipeline checks them, just like latency.</p>
+<p>And speed isn’t the only constraint. An agent can hit every target with code nobody can safely change. Layer 5 closes that gap.</p>
+<h3>Layer 4: End-to-end tests</h3>
+<p><em>Does the whole system work?</em></p>
+<p>Every component can pass, every contract can match, and the system can still fail. An order service publishes an event before its transaction commits. An inventory service mishandles a duplicate message. A payment times out after the provider already charged the card.</p>
+<p>These bugs live <em>between</em> components. So keep end-to-end tests few, and aim them at the critical business journeys.</p>
+<p>Don’t copy every component test up there.</p>
+<h3>Layer 5: Executable quality and security rules</h3>
+<p><em>Can we still change this code next month, and trust what’s in it?</em></p>
+<p>Here’s the trap hiding in everything I’ve argued so far.</p>
+<p>If humans stop reading every line, nobody notices when the agent solves a problem with a 400-line method and eleven nested conditions. The scenario passes. The latency target is met. The pipeline is green.</p>
+<p>And the damage stays invisible until the next change.</p>
+<p>That’s what people miss. Maintainability isn’t about aesthetics anymore. In an AI workflow, it’s a direct cost. The agent that wrote the tangled code is the same agent that has to modify it next week. Tangled code means more to read, more tokens, more wrong guesses, and more regressions.</p>
+<p>Messy code makes your agent slower and sloppier.</p>
+<p>Now add the real problem: <strong>machines write code faster than humans can read it.</strong> So mess piles up at machine speed. You can’t fix a machine-speed problem with human-speed review.</p>
+<p>So stop reviewing it. <strong>Write the rule once. Make it executable.</strong></p>
+<p>Here’s an architecture rule, in plain words:</p>
+<pre><code class="language-yaml">
+Rule: nothing in "domain" may depend on anything in "infrastructure".
+</code></pre>
+<p>Every ecosystem has a tool that turns that sentence into a failing build: ArchUnit for Java, dependency-cruiser for Node and TypeScript, NetArchTest for .NET. After that, no agent can merge a violation of that rule, and no reviewer has to remember it exists.</p>
+<p>It’s a spec. Not for behavior, but for the <em>shape of the code</em>.</p>
+<p>The same idea works for everything you already know how to measure:</p>
+<ul>
+  <li>A SonarQube quality gate that fails the build on new code smells or excess duplication.</li>
+  <li>Analyzer rules that cap cognitive complexity per method.</li>
+  <li>Limits on class size, nesting depth, and dependency cycles.</li>
+</ul>
+<p>And it isn’t only about complexity. The same gates can check what an unreviewed diff might hide:</p>
+<ul>
+  <li><strong>Security analysis.</strong> Static analysis such as CodeQL, Semgrep, or SonarQube’s security rules, for injection, unsafe deserialization, and hardcoded credentials.</li>
+  <li><strong>Supply chain.</strong> Dependency vulnerability and license scans, so the agent can’t quietly add a risky package.</li>
+  <li><strong>Secret scanning</strong> on every commit.</li>
+  <li><strong>Test quality.</strong> A mutation-score threshold, so tests that prove nothing fail the build.</li>
+</ul>
+<p>None of these are new. What’s new is <strong>where they sit in the loop</strong>. When a gate fails, the violation goes straight back to the agent. It refactors. The gate runs again. A human never sees the mess.</p>
+<p>The best reviewer is the one that already rejected the bad pull request.</p>
+<p>And notice the pattern. LLMs are non-deterministic, so we surround them with <strong>deterministic gates</strong>. A rule doesn’t get tired at line 500. It doesn’t skim. It doesn’t approve because it’s Friday.</p>
+<p>Now the honest limit. A rule can’t enforce <strong>Single Responsibility</strong> or <strong>Open/Closed</strong>. Those are judgments about <em>meaning</em>, and no analyzer understands meaning. The best tools give you proxies: a constructor with eight dependencies, a class with low cohesion, a <code>switch</code> on type that grows with every feature. Smoke alarms, not proof. And an agent can dodge a metric by splitting one tangled function into ten.</p>
+<p>So I’d do two things.</p>
+<p><strong>First, put an AI reviewer in the loop.</strong> A second agent checks each change against your design principles and flags the suspicious ones. It’s non-deterministic, so it advises. It doesn’t gate.</p>
+<p><strong>Second, ask whether those principles carry the same weight now.</strong> Those principles were economic heuristics for expensive human change: keep edits small and safe, because every modification risked breaking something. When behavioral tests catch the breakage and an agent can reshape code in seconds, “closed for modification” matters less. What still pays is whatever keeps code easy for an agent to read and change correctly.</p>
+<p>Behavior is the spec. Quality rules are its other half. Humans own both, and the agent works inside them.</p>
+<p>This isn’t a ban on unit tests. It’s a change in where the default investment goes.</p>
+<h2>The best argument against me</h2>
+<p>If you know testing history, you’re already objecting.</p>
+<p>In 2009, J.B. Rainsberger gave a talk called <a href="https://www.infoq.com/presentations/integration-tests-scam">“Integration Tests Are a Scam”</a>, and he later renamed his blog series “Beware the Integrated Tests Scam.” His case: tests that exercise many pieces together fail for many reasons, run slowly, and can never cover every path, because the combinations explode. His alternative is focused collaboration tests plus contract tests.</p>
+<p>That sounds like the opposite of what I’m proposing, so I owe you an answer.</p>
+<p>First, he <a href="https://blog.thecodewhisperer.com/permalink/clearing-up-the-integrated-tests-scam">clarified what he meant</a>: the scam is using integrated tests to check the basic correctness of your code, in place of focused tests that give better design feedback. He still writes a few integrated tests.</p>
+<p><strong>Where he’s right, and I agree.</strong> Contract tests are essential. That’s my Layer 2, and it’s his idea. Algorithms deserve unit tests. And you can’t enumerate every internal path through a big test.</p>
+<p><strong>Where AI changes the answer.</strong></p>
+<ul>
+  <li><strong>Combinatorics.</strong> A capability test doesn’t try to cover every internal path. It pins the behavior at the boundary and lets the agent own the internals.</li>
+  <li><strong>Speed.</strong> His pain was a human waiting on a slow suite in a tight test-driven development (TDD) loop. An agent running tests in parallel, unattended, tolerates that far better.</li>
+  <li><strong>“Who knows what’s broken?”</strong> That’s the next section, and observability is my answer.</li>
+  <li><strong>Design feedback.</strong> This is his deepest point: small tests push you toward better design. For humans who live in the code, that matters. When agents write the internals, I’d rather enforce design with the rules in Layer 5. That’s a bet, and reasonable people will disagree.</li>
+</ul>
+<h2>“But component tests don’t tell me what broke”</h2>
+<p>This is the best argument for unit tests, and I want to take it seriously.</p>
+<p>A unit test fails and you know exactly which method is guilty. A component test fails and all you know is that <em>an order couldn’t be placed</em>. Was it validation? Persistence? Inventory? Event publishing?</p>
+<p>Fair. Historically, that precision was the whole point.</p>
+<p>But what if the application could explain itself?</p>
+<p>OpenTelemetry gives us standard traces, metrics, and logs in every major language. Tooling is starting to make that runtime data available to AI agents, and .NET Aspire’s MCP server is one example. Now a failing scenario can turn into an investigation:</p>
+<ol>
+  <li>Find the failed behavioral scenario.</li>
+  <li>Pull its trace and the related operations.</li>
+  <li>Locate the failing service or dependency.</li>
+  <li>Read the correlated logs and errors.</li>
+  <li>Inspect the code, propose a fix, rerun the scenario.</li>
+  <li>Check the new telemetry to confirm the outcome.</li>
+</ol>
+<p>The test tells you <strong>that</strong> the capability is broken. Observability tells you <strong>why</strong>.</p>
+<p>It isn’t magic. Bad instrumentation, missing correlation, and sampling can all blind you. But it’s evidence that doesn’t depend on how any single test is structured.</p>
+<p>And it does something unit tests never could. It helps you investigate the failures you <strong>never wrote a test for</strong>. A test suite only verifies the scenarios you imagined. Production shows you the ones you didn’t.</p>
+<p>And here’s what makes the investment easy to justify: <strong>you’ll need this grade of observability anyway.</strong> If you ever want an AI site-reliability (SRE) agent that catches production issues and fixes them for you, it needs the same traces, logs, and metrics to work from. Build it once, and it serves your tests and your on-call. The agent that debugs a failing scenario today is the one that triages an incident tomorrow.</p>
+<h2>The objections, answered</h2>
+<p><strong>“Specs are ambiguous.”</strong> So is code written from a vague ticket. The difference: a spec that runs against the system exposes its own ambiguity the first time it fails.</p>
+<p><strong>“Gherkin was tried and abandoned.”</strong> It was a tax when humans hand-wrote every step definition. When agents write the glue, the cost that killed it largely disappears.</p>
+<p><strong>“Component tests are slower and flakier.”</strong> They are, when you hand-roll the setup and fake half the world. Fix that with real infrastructure instead: Testcontainers, Docker Compose, or Aspire in .NET start the application and its dependencies, and the test talks to it like a real client. Yes, container start-up costs time, so run tests in parallel and budget for it. But a few extra seconds of machine time is cheaper than an hour of human review.</p>
+<p><strong>“AI can write wrong specs.”</strong> Absolutely. That’s the point. Humans own the spec because it’s the one artifact where human judgment can’t be delegated.</p>
+<h2>Where this breaks</h2>
+<p>I’m not selling a silver bullet. Here’s where this approach can fail.</p>
+<p><strong>A wrong spec can pass a wrong implementation.</strong> If the same agent writes the scenario, the step definitions, and the code, they can share one mistake and everything goes green. So humans must own the scenarios and review them as the primary artifact. Add <strong>mutation testing</strong> too (Stryker for JavaScript and .NET, PIT for Java, for example). It deliberately breaks your code and checks that your tests notice. A test that survives every mutant proves nothing.</p>
+<p><strong>Component tests cost real setup.</strong> Fixtures, containers, test data, and a stable harness take work up front, and AI will sometimes get them wrong. Build the harness once, with care, and let the agent write scenarios against it.</p>
+<p><strong>Cheaper isn’t free.</strong> The cost of testing shifts from typing to fixing setups and tuning prompts. The bet is that this is still cheaper than reviewing implementation-coupled tests forever. That’s a bet, not a fact, which is why the experiment below exists.</p>
+<p><strong>Observability needs investment.</strong> Traces only help if your services are instrumented and correlated. Without that, the agent is guessing.</p>
+<h2>What to do on Monday</h2>
+<p>This is a hypothesis, not a proven method, so test it. You don’t need permission to start.</p>
+<ol>
+  <li>Pick one new feature. Write its behavior as scenarios <strong>before</strong> the agent writes any code.</li>
+  <li>Let the agent implement it, and run the scenarios through the real boundary.</li>
+  <li>Ask which unit tests you’d actually miss if they vanished. Keep those. Question the rest.</li>
+  <li>Add contract tests wherever you mock something you don’t own.</li>
+  <li>Review the scenarios like you used to review code.</li>
+</ol>
+<p>Two weeks later, compare. How many tests broke during refactors? How long did review take? How confident were you?</p>
+<h2>Your move</h2>
+<p>For decades, we were taught to test the smallest piece of our code.</p>
+<p>The smallest piece is no longer ours.</p>
+<p>Our language is the spec. Our tests should live there.</p>
+<p><strong>Disagree? Good.</strong> Tell me which unit test you’d still defend, and why a behavioral scenario can’t cover it.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Written by <a href="https://tn.linkedin.com/in/mohamed-amine-bchir" target="_blank" rel="noopener">Mohamed Amine Bchir</a> &bull; &copy; 2026 The AI Artisan Notes &bull; Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
+      <p class="footer-links">
+        <a href="../feed.xml">RSS Feed</a> &bull;
+        <a href="../llms.txt">llms.txt (AI Index)</a> &bull;
+        <a href="../sitemap.xml">Sitemap</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# The AI Artisan Notes
+> Rethinking Software Standards in the Age of AI — Field notes, architectural patterns, and engineering reflections by Mohamed Amine Bchir.
+
+Author: Mohamed Amine Bchir (.NET Tech Lead & Software Craftsman)
+Profile: https://tn.linkedin.com/in/mohamed-amine-bchir
+
+## Core Principles & Philosophy
+- The Three Shifts: Deprecated syntactic rituals, altered specification-driven architecture, and created evaluation harnesses for AI.
+- Spec-Driven Engineering: Behavioral contracts are the persistent source of truth; implementations are disposable artifacts.
+- Production Reality Over Demo Magic: High determinism, observability, and craftsmanship over brittle AI wrappers.
+
+## Articles & Field Notes
+- [Unit Tests Are Dead. (But Only If You Still Think a “Unit” Is a Method)](https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html): Why AI code generation breaks method-level unit testing, how the test pyramid turns into a diamond, and why executable specs are the new source of truth.
+- [Welcome to The AI Artisan Notes: Software Craftsmanship in the Age of AI](https://bchir.github.io/the-ai-artisan-notes/articles/welcome-to-the-ai-artisan-notes.html): Introducing The AI Artisan Notes: a field log exploring AI engineering, software craftsmanship, and pragmatic systems.

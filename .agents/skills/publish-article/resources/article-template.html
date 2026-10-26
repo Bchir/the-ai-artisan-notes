@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}} | The AI Artisan Notes</title>
+  <meta name="description" content="{{DESCRIPTION}}">
+  <link rel="canonical" href="{{CANONICAL_URL}}">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:site_name" content="The AI Artisan Notes">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESCRIPTION}}">
+  <meta property="og:url" content="{{CANONICAL_URL}}">
+  <meta property="article:published_time" content="{{DATE_ISO}}">
+  <meta property="article:author" content="{{AUTHOR_NAME}}">
+  {{OG_TAGS}}
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{TITLE}}">
+  <meta name="twitter:description" content="{{DESCRIPTION}}">
+
+  <!-- Feeds & Machine Readability -->
+  <link rel="alternate" type="application/rss+xml" title="The AI Artisan Notes RSS Feed" href="../feed.xml">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <!-- Structured Data (Schema.org TechArticle) -->
+  <script type="application/ld+json">
+{{SCHEMA_JSON_LD}}
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="site-nav">
+        <a href="../">&larr; The AI Artisan Notes</a>
+      </nav>
+      <h1 class="article-title">{{TITLE}}</h1>
+      <p class="article-subtitle">{{SUBTITLE}}</p>
+      <p class="article-meta">{{DATE_FORMATTED}} &bull; {{MINUTES}} min read &bull; By <a href="{{AUTHOR_URL}}" target="_blank" rel="noopener">{{AUTHOR_NAME}}</a></p>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="article-content">
+{{CONTENT_HTML}}
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Written by <a href="{{AUTHOR_URL}}" target="_blank" rel="noopener">{{AUTHOR_NAME}}</a> &bull; &copy; 2026 The AI Artisan Notes &bull; Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
+      <p class="footer-links">
+        <a href="../feed.xml">RSS Feed</a> &bull;
+        <a href="../llms.txt">llms.txt (AI Index)</a> &bull;
+        <a href="../sitemap.xml">Sitemap</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The AI Artisan Notes | Rethinking Software Standards in the Age of AI</title>
+  <meta name="description" content="A digital field notebook sharing a practitioner's vision and reflections on how software engineering craft and standards are evolving in the age of AI.">
+  <link rel="canonical" href="https://bchir.github.io/the-ai-artisan-notes/">
+
+  <!-- Open Graph / LinkedIn / Facebook -->
+  <meta property="og:site_name" content="The AI Artisan Notes">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The AI Artisan Notes | Rethinking Software Standards in the Age of AI">
+  <meta property="og:description" content="A digital field notebook sharing a practitioner's vision and reflections on how software engineering craft and standards are evolving in the age of AI.">
+  <meta property="og:url" content="https://bchir.github.io/the-ai-artisan-notes/">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The AI Artisan Notes | Rethinking Software Standards in the Age of AI">
+  <meta name="twitter:description" content="A digital field notebook sharing a practitioner's vision and reflections on how software engineering craft and standards are evolving in the age of AI.">
+
+  <!-- Feeds & Machine Discovery -->
+  <link rel="alternate" type="application/rss+xml" title="The AI Artisan Notes RSS Feed" href="feed.xml">
+
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="posts.js"></script>
+
+  <!-- Structured Data (Schema.org WebSite & Person) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "The AI Artisan Notes",
+    "url": "https://bchir.github.io/the-ai-artisan-notes/",
+    "description": "Rethinking Software Standards in the Age of AI — Field notes, architectural patterns, and engineering reflections by Mohamed Amine Bchir.",
+    "author": {
+      "@type": "Person",
+      "name": "Mohamed Amine Bchir",
+      "jobTitle": ".NET Tech Lead & Software Craftsman",
+      "url": "https://tn.linkedin.com/in/mohamed-amine-bchir",
+      "sameAs": [
+        "https://tn.linkedin.com/in/mohamed-amine-bchir",
+        "https://github.com/Bchir"
+      ]
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title"><a href="./">The AI Artisan Notes</a></h1>
+      <p class="site-subtitle">By <a href="https://tn.linkedin.com/in/mohamed-amine-bchir" target="_blank" rel="noopener">Mohamed Amine Bchir</a> &bull; .NET Tech Lead &amp; Software Craftsman</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2 class="hero-statement">
+        Software engineering standards were built around human typing bottlenecks and syntax rituals. AI broke the physics—now we have to rethink the craft.
+      </h2>
+      <p class="hero-intro">
+        A digital field notebook by <a href="https://tn.linkedin.com/in/mohamed-amine-bchir" target="_blank" rel="noopener">Mohamed Amine Bchir</a> exploring what happens when artificial intelligence collides with decades of engineering orthodoxy—sharing my vision, field experiments, and reflections on how our craft and standards might evolve.
+      </p>
+    </section>
+
+    <section class="principles">
+      <h3 class="section-title">The Three Shifts</h3>
+      <div class="principle-grid">
+        <div class="principle-card">
+          <span class="principle-tag tag-deprecated">Deprecated</span>
+          <p>Syntactic rituals, manual typing friction, and testing dogmas built for a pre-AI economy.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-tag tag-altered">Altered</span>
+          <p>Architecture, refactoring, and code review shifted upstream to specifications and intent.</p>
+        </div>
+        <div class="principle-card">
+          <span class="principle-tag tag-created">Created</span>
+          <p>Evaluation harnesses, intent guardrails, and deterministic verification for agentic systems.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="articles-list" id="writing">
+      <h3>Latest Writing</h3>
+      <div id="posts"></div>
+      <noscript>
+        <article class="article-card">
+          <h4><a href="articles/unit-tests-are-dead.html">Unit Tests Are Dead. (But Only If You Still Think a "Unit" Is a Method)</a></h4>
+          <p class="article-meta">October 2026 &bull; 15 min read</p>
+          <p class="article-excerpt">An exploration of how the economic model of testing has changed. Why the "test pyramid" is becoming a diamond, and why the specification is the only layer we can fully trust.</p>
+        </article>
+      </noscript>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Written by <a href="https://tn.linkedin.com/in/mohamed-amine-bchir" target="_blank" rel="noopener">Mohamed Amine Bchir</a> &bull; &copy; 2026 The AI Artisan Notes &bull; Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
+      <p class="footer-links">
+        <a href="feed.xml">RSS Feed</a> &bull;
+        <a href="llms.txt">llms.txt (AI Index)</a> &bull;
+        <a href="sitemap.xml">Sitemap</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var list = (window.POSTS || []).slice().sort(function(a, b) {
+        return a.date < b.date ? 1 : -1;
+      });
+      var box = document.getElementById('posts');
+      list.forEach(function(p){
+        var card = document.createElement('article');
+        card.className = 'article-card';
+        
+        var titleElem = document.createElement('h4');
+        var link = document.createElement('a');
+        link.href = p.url;
+        link.textContent = p.title;
+        titleElem.appendChild(link);
+        
+        var meta = document.createElement('p');
+        meta.className = 'article-meta';
+        var d = new Date(p.date + 'T00:00:00');
+        var dateFormatted = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+        meta.textContent = dateFormatted + ' \u2022 ' + p.minutes + ' min read';
+        
+        var excerpt = document.createElement('p');
+        excerpt.className = 'article-excerpt';
+        excerpt.textContent = p.description;
+        
+        card.appendChild(titleElem);
+        card.appendChild(meta);
+        card.appendChild(excerpt);
+        box.appendChild(card);
+      });
+    })();
+  </script>
+</body>
+</html>
