@@ -17,9 +17,6 @@ seriesOrder: 3
 
 An inventory service may need product details from a Product Catalogue service, user information from a User service, or authorization from a Payment service. Each service can work correctly on its own and still fail when they communicate: the caller sends the wrong field, expects the wrong response, or publishes a message with a schema the consumer does not understand.
 
-> [!NOTE]
-> **In brief:** Contract tests check that service consumers and providers agree on APIs, messages, and schemas, catching compatibility errors that isolated tests and mocks can miss.
-
 This is not a new problem caused by AI. Microservice teams have always needed to keep independently developed services compatible. AI makes the old problem easier to reproduce: an agent can confidently invent an endpoint, response shape, or event schema, then write a mock that agrees with the same invention. The local test passes; the real service does not.
 
 ## Check both sides of the agreement

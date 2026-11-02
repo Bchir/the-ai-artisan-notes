@@ -16,9 +16,6 @@ seriesOrder: 5
 
 This series began with a green build that did not deserve our confidence: an agent changed the implementation and its tests together, and both could share the same mistaken assumption.
 
-> [!NOTE]
-> **In brief:** Tests and quality gates strengthen evidence for a change, but operational readiness still needs risk-based checks and human judgment about acceptable risk.
-
 The answer was not to abandon unit tests. It was to use different checks for different questions. Focused unit tests protect algorithms and invariants. Spec tests check agreed behavior through the application boundary. Contract tests check compatibility between services. Deterministic quality gates enforce the engineering standards we choose. Together, they give us stronger evidence about a change, while leaving human review focused on behavior, design, and risk decisions that need judgment.
 
 But passing the reservation scenarios, including the concurrency case, does not show that the service will meet its latency and error-rate targets under peak traffic. Load and recovery checks can provide evidence about those operational risks. Choose them in proportion to the cost of failure, not as a checklist for every change.

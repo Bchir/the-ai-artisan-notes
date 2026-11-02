@@ -18,9 +18,6 @@ seriesOrder: 1
 
 You probably asked an AI agent to refactor legacy code. It changed the implementation, rewrote the unit tests, and reported a green build.
 
-> [!NOTE]
-> **In brief:** AI can make implementation and implementation-coupled tests agree while both miss user behavior. Review agreed specs and use checks at the boundaries that matter.
-
 You may even have asked it to follow a TDD loop: write a failing test, implement the change, then run the tests. But the same agent chose both the implementation and what the tests should expect, from the same prompt and context, perhaps with the same mistaken assumption. That is feedback, not independent verification.
 
 Then comes the diff: implementation and tests, line by line, file by file. You try to follow it. The PR stalls, or you keep reading past the point where you can tell whether the tests still protect the behavior.

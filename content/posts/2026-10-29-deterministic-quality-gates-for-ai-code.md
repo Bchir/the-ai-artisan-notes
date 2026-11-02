@@ -22,9 +22,6 @@ An agent changes that trade-off. It can handle the repetitive loop of running th
 
 This is not a reason to blindly promote every warning to an error. People still choose which standards matter, and agents still need guidance to address the design concern rather than silence the signal. The payoff is less human effort spent on routine cleanup and more attention available for behavior, architecture, and decisions that need judgment.
 
-> [!NOTE]
-> **In brief:** Deterministic quality gates let agents resolve repeatable engineering feedback before human review, freeing people to focus on design and decisions that need judgment.
-
 ## Choose gates that protect real decisions
 
 A quality gate is useful when it enforces a decision the team actually values and gives feedback specific enough to act on. Depending on the stack and risk, that might be a complexity threshold, a forbidden dependency rule, a type check, or a security analyzer. Turning on every available warning is not a quality strategy; a noisy gate teaches people and agents to work around it.
