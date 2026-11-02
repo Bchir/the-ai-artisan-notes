@@ -5,23 +5,51 @@
     <link>https://bchir.github.io/the-ai-artisan-notes/</link>
     <description>Rethinking Software Standards in the Age of AI — Field notes, architectural patterns, and engineering reflections by Mohamed Amine Bchir.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 26 Oct 2026 18:40:32 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 02 Nov 2026 20:54:43 +0100</lastBuildDate>
     <atom:link href="https://bchir.github.io/the-ai-artisan-notes/feed.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Unit Tests Are Dead. (But Only If You Still Think a “Unit” Is a Method)</title>
-      <link>https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html</link>
-      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html</guid>
-      <pubDate>Mon, 26 Oct 2026 00:00:00 +0100</pubDate>
+      <title>What Our Tests Don't Prove</title>
+      <link>https://bchir.github.io/the-ai-artisan-notes/articles/what-our-tests-dont-prove.html</link>
+      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/what-our-tests-dont-prove.html</guid>
+      <pubDate>Fri, 30 Oct 2026 00:00:00 +0100</pubDate>
       <author>Mohamed Amine Bchir</author>
-      <description>Why AI code generation breaks method-level unit testing, how the test pyramid turns into a diamond, and why executable specs are the new source of truth.</description>
-    </item>
+      <description>Unit, spec, and contract tests provide evidence for changes, but operational readiness still requires risk-based load and recovery checks.</description>
+    </item>
+
     <item>
-      <title>Welcome to The AI Artisan Notes: Software Craftsmanship in the Age of AI</title>
-      <link>https://bchir.github.io/the-ai-artisan-notes/articles/welcome-to-the-ai-artisan-notes.html</link>
-      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/welcome-to-the-ai-artisan-notes.html</guid>
+      <title>Deterministic Quality Gates for AI Code</title>
+      <link>https://bchir.github.io/the-ai-artisan-notes/articles/deterministic-quality-gates-for-ai-code.html</link>
+      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/deterministic-quality-gates-for-ai-code.html</guid>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0100</pubDate>
+      <author>Mohamed Amine Bchir</author>
+      <description>Deterministic quality gates let agents fix routine violations before review, so people can focus on behavior, design, and engineering decisions.</description>
+    </item>
+
+    <item>
+      <title>Contract Tests for AI-Generated Service Integrations</title>
+      <link>https://bchir.github.io/the-ai-artisan-notes/articles/contract-and-integration-testing.html</link>
+      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/contract-and-integration-testing.html</guid>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0100</pubDate>
+      <author>Mohamed Amine Bchir</author>
+      <description>Contract tests verify that services agree on APIs and message schemas, catching incompatible integrations and invented interfaces in AI-generated code.</description>
+    </item>
+
+    <item>
+      <title>Spec Tests at the Service Boundary</title>
+      <link>https://bchir.github.io/the-ai-artisan-notes/articles/testing-real-service-boundaries.html</link>
+      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/testing-real-service-boundaries.html</guid>
+      <pubDate>Tue, 27 Oct 2026 00:00:00 +0100</pubDate>
+      <author>Mohamed Amine Bchir</author>
+      <description>Spec tests capture agreed service behavior in readable scenarios and run against the real application boundary, with examples and tooling across languages.</description>
+    </item>
+
+    <item>
+      <title>Unit Tests Are Dead. The Unit Moved.</title>
+      <link>https://bchir.github.io/the-ai-artisan-notes/articles/ai-unit-tests-unit-moved.html</link>
+      <guid isPermaLink="true">https://bchir.github.io/the-ai-artisan-notes/articles/ai-unit-tests-unit-moved.html</guid>
       <pubDate>Mon, 26 Oct 2026 00:00:00 +0100</pubDate>
       <author>Mohamed Amine Bchir</author>
-      <description>Introducing The AI Artisan Notes: a field log exploring AI engineering, software craftsmanship, and pragmatic systems.</description>
+      <description>AI can change implementation and its tests together. Learn how to shift code review toward agreed behavior and validate AI-assisted changes with separate checks.</description>
     </item>
   </channel>
 </rss>

@@ -4,16 +4,39 @@
     <loc>https://bchir.github.io/the-ai-artisan-notes/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>
+  </url>
+
   <url>
-    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/unit-tests-are-dead.html</loc>
+    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/ai-unit-tests-unit-moved.html</loc>
     <lastmod>2026-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
+  </url>
+
   <url>
-    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/welcome-to-the-ai-artisan-notes.html</loc>
-    <lastmod>2026-10-26</lastmod>
+    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/testing-real-service-boundaries.html</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/contract-and-integration-testing.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/deterministic-quality-gates-for-ai-code.html</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bchir.github.io/the-ai-artisan-notes/articles/what-our-tests-dont-prove.html</loc>
+    <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

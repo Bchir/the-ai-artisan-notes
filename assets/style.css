@@ -336,6 +336,19 @@ a:hover {
   margin: 0;
 }
 
+.series-card h4 {
+  color: var(--heading-color);
+}
+
+.series-parts {
+  margin: 24px 0 0;
+  padding-left: 28px;
+}
+
+.series-parts li {
+  margin-bottom: 8px;
+}
+
 /* Article Page Layout & Prose */
 .article-header {
   padding: 60px 0 40px;

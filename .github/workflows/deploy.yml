@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -28,10 +27,18 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare published site
+        run: |
+          mkdir -p _site _site/articles
+          cp index.html posts.js robots.txt sitemap.xml feed.xml llms.txt llms-full.txt _site/
+          cp articles/*.html _site/articles/
+          cp -R assets _site/
+          touch _site/.nojekyll
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment
