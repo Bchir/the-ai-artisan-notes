@@ -17,9 +17,6 @@ seriesOrder: 2
 
 Readable, executable scenarios for expected behavior are not new. I’ll call them **spec tests** here. The change is in what we value: make them primary evidence for capability-level behavior, while keeping focused unit tests for algorithms and invariants.
 
-> [!NOTE]
-> **In brief:** Spec tests describe agreed capabilities in readable scenarios and verify them through the running service, independently of its internal design.
-
 Imagine an agent is asked to add reservations. Before debating classes or methods, agree on the behavior: a customer can reserve available stock, an over-capacity request is rejected without changing inventory, and two customers competing for the last unit cannot both succeed.
 
 Those promises can be written as readable, executable scenarios:
