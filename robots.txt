@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Welcoming AI & Generative Search Engines
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://bchir.github.io/the-ai-artisan-notes/sitemap.xml
