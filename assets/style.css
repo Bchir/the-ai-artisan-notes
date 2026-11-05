@@ -379,6 +379,17 @@ a:hover {
   line-height: 1.85;
 }
 
+.article-illustration {
+  margin: 28px 0;
+}
+
+.article-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 .article-content h2 {
   font-size: 1.85rem;
   font-weight: 800;

@@ -13,6 +13,8 @@
   <meta property="og:title" content="Contract Tests for AI-Generated Service Integrations">
   <meta property="og:description" content="Contract tests verify that services agree on APIs and message schemas, catching incompatible integrations and invented interfaces in AI-generated code.">
   <meta property="og:url" content="https://bchir.github.io/the-ai-artisan-notes/articles/contract-and-integration-testing.html">
+  <meta property="og:image" content="https://bchir.github.io/the-ai-artisan-notes/assets/Contract-test-illustration.png">
+  <meta property="og:image:alt" content="An inventory consumer and product catalogue provider are checked against a contract test.">
   <meta property="article:published_time" content="2026-10-28T00:00:00+01:00">
   <meta property="article:author" content="Mohamed Amine Bchir">
   <meta property="article:tag" content="Testing">
@@ -23,6 +25,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Contract Tests for AI-Generated Service Integrations">
   <meta name="twitter:description" content="Contract tests verify that services agree on APIs and message schemas, catching incompatible integrations and invented interfaces in AI-generated code.">
+  <meta name="twitter:image" content="https://bchir.github.io/the-ai-artisan-notes/assets/Contract-test-illustration.png">
+  <meta name="twitter:image:alt" content="An inventory consumer and product catalogue provider are checked against a contract test.">
 
   <!-- Feeds & Machine Readability -->
   <link rel="alternate" type="application/rss+xml" title="The AI Artisan Notes RSS Feed" href="../feed.xml">
@@ -76,17 +80,11 @@
 
   <main class="container">
     <article class="article-content">
-<p>An inventory service may need product details from a Product Catalogue service, user information from a User service, or authorization from a Payment service. Each service can work correctly on its own and still fail when they communicate: the caller sends the wrong field, expects the wrong response, or publishes a message with a schema the consumer does not understand.</p>
-<p>This is not a new problem caused by AI. Microservice teams have always needed to keep independently developed services compatible. AI makes the old problem easier to reproduce: an agent can confidently invent an endpoint, response shape, or event schema, then write a mock that agrees with the same invention. The local test passes; the real service does not.</p>
-<h2>Check both sides of the agreement</h2>
-<p>A contract test checks compatibility between a consumer and provider. In a consumer-driven approach, the consumer records the interactions it relies on and the provider verifies it can honor them. With a provider-owned schema, consumers check their use against that published agreement. For messaging, producer and consumer must agree on the event schema and its evolution.</p>
-<div class="mermaid">
-flowchart LR
-    Inventory["Inventory service<br/>(consumer)"] -->|"API request"| Catalogue["Product Catalogue<br/>(provider)"]
-    Contract["Contract test<br/>against agreed API or schema"]
-    Contract -. verifies .-> Inventory
-    Contract -. verifies .-> Catalogue
-</div>
+    <p>An inventory service may need product details from a Product Catalogue service, user information from a User service, or authorization from a Payment service. Each service can work correctly on its own and still fail when they communicate: the caller sends the wrong field, expects the wrong response, or publishes a message with a schema the consumer does not understand.</p>
+    <p>This is not a new problem caused by AI. Microservice teams have always needed to keep independently developed services compatible. AI makes the old problem easier to reproduce: an agent can confidently invent an endpoint, response shape, or event schema, then write a mock that agrees with the same invention. The local test passes; the real service does not.</p>
+    <h2>Check both sides of the agreement</h2>
+    <p>A contract test checks compatibility between a consumer and provider. In a consumer-driven approach, the consumer records the interactions it relies on and the provider verifies it can honor them. With a provider-owned schema, consumers check their use against that published agreement. For messaging, producer and consumer must agree on the event schema and its evolution.</p>
+    <figure class="article-illustration"><img src="../assets/Contract-test-illustration.png" alt="An inventory consumer and product catalogue provider are checked against a contract test."></figure>
 <p>The contract needs grounding outside the generated client and its mock: an OpenAPI document, event schema, or consumer-driven contract verified against the provider. A document can be stale, so it is not evidence that the running provider conforms unless it is checked. These tests establish compatibility, not availability, authentication, timeout behavior, or resilience.</p>
 <p>Tools such as <a href="https://pact.io/">Pact</a> and <a href="https://microcks.io/">Microcks</a> can help define and verify these agreements. The point here is not a tool tutorial: when an agent creates an integration, retain an independent compatibility check and watch for plausible but invented APIs and schemas.</p>
 <p>The service-boundary spec from the previous article can use a mock server to keep a scenario controlled. Contract testing asks the next question: <strong>does that mock represent a contract the real dependent service also honors?</strong></p>
