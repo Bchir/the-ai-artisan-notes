@@ -16,11 +16,11 @@ seriesOrder: 5
 
 This series began with a green build that did not deserve our confidence: an agent changed the implementation and its tests together, and both could share the same mistaken assumption.
 
-The answer was not to abandon unit tests. It was to use different checks for different questions. Focused unit tests protect algorithms and invariants. Spec tests check agreed behavior through the application boundary. Contract tests check compatibility between services. Deterministic quality gates enforce the engineering standards we choose. Together, they give us stronger evidence about a change, while leaving human review focused on behavior, design, and risk decisions that need judgment.
+Across the series, we looked at ways to agree on expected behavior, check it through service boundaries, verify compatibility between services, and enforce engineering standards. These checks help us respect our specifications and the behavior we promised. They do not close the book on operational requirements.
 
-But passing the reservation scenarios, including the concurrency case, does not show that the service will meet its latency and error-rate targets under peak traffic. Load and recovery checks can provide evidence about those operational risks. Choose them in proportion to the cost of failure, not as a checklist for every change.
+There is still a whole world to validate: latency, throughput, capacity, resilience, and recovery. A spec test can prove that an item is added to a cart, but not that it happens quickly under peak load. Make a customer wait 60 seconds and you have an angry customer, even if every functional test passes. Load, stress, and recovery tests matter too; choose them according to the operational requirements and the cost of failure.
 
-A green build means the checks we chose passed. It is not a verdict on the whole system. We choose the standards, gather the evidence that matters, and accept the remaining risk.
+A green build means the checks we chose passed. It is not a verdict on the whole system. We must gather evidence for both the behavior we promised and the operational experience users need, then make the remaining risks explicit.
 
 ## The series
 

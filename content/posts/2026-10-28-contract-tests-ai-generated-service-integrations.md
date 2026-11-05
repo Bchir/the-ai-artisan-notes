@@ -23,13 +23,7 @@ This is not a new problem caused by AI. Microservice teams have always needed to
 
 A contract test checks compatibility between a consumer and provider. In a consumer-driven approach, the consumer records the interactions it relies on and the provider verifies it can honor them. With a provider-owned schema, consumers check their use against that published agreement. For messaging, producer and consumer must agree on the event schema and its evolution.
 
-```mermaid
-flowchart LR
-    Inventory["Inventory service<br/>(consumer)"] -->|"API request"| Catalogue["Product Catalogue<br/>(provider)"]
-    Contract["Contract test<br/>against agreed API or schema"]
-    Contract -. verifies .-> Inventory
-    Contract -. verifies .-> Catalogue
-```
+![An inventory consumer and product catalogue provider are checked against a contract test.](../assets/Contract-test-illustration.png)
 
 The contract needs grounding outside the generated client and its mock: an OpenAPI document, event schema, or consumer-driven contract verified against the provider. A document can be stale, so it is not evidence that the running provider conforms unless it is checked. These tests establish compatibility, not availability, authentication, timeout behavior, or resilience.
 

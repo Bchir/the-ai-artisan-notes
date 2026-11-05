@@ -13,6 +13,8 @@
   <meta property="og:title" content="Unit Tests Are Dead. The Unit Moved.">
   <meta property="og:description" content="AI can change implementation and its tests together. Learn how to shift code review toward agreed behavior and validate AI-assisted changes with separate checks.">
   <meta property="og:url" content="https://bchir.github.io/the-ai-artisan-notes/articles/ai-unit-tests-unit-moved.html">
+  <meta property="og:image" content="https://bchir.github.io/the-ai-artisan-notes/assets/UnitTest-is-dead-thumbnail.png">
+  <meta property="og:image:alt" content="A cheerful robot tosses a unit test toward a grave marked RIP Unit Tests.">
   <meta property="article:published_time" content="2026-10-26T00:00:00+01:00">
   <meta property="article:author" content="Mohamed Amine Bchir">
   <meta property="article:tag" content="Testing">
@@ -23,6 +25,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Unit Tests Are Dead. The Unit Moved.">
   <meta name="twitter:description" content="AI can change implementation and its tests together. Learn how to shift code review toward agreed behavior and validate AI-assisted changes with separate checks.">
+  <meta name="twitter:image" content="https://bchir.github.io/the-ai-artisan-notes/assets/UnitTest-is-dead-thumbnail.png">
+  <meta name="twitter:image:alt" content="A cheerful robot tosses a unit test toward a grave marked RIP Unit Tests.">
 
   <!-- Feeds & Machine Readability -->
   <link rel="alternate" type="application/rss+xml" title="The AI Artisan Notes RSS Feed" href="../feed.xml">
@@ -77,22 +81,23 @@
   <main class="container">
     <article class="article-content">
 <p>You probably asked an AI agent to refactor legacy code. It changed the implementation, rewrote the unit tests, and reported a green build.</p>
-<p>You may even have asked it to follow a TDD loop: write a failing test, implement the change, then run the tests. But the same agent chose both the implementation and what the tests should expect, from the same prompt and context, perhaps with the same mistaken assumption. That is feedback, not independent verification.</p>
-<p>Then comes the diff: implementation and tests, line by line, file by file. You try to follow it. The PR stalls, or you keep reading past the point where you can tell whether the tests still protect the behavior.</p>
-<p>That’s review exhaustion, not confidence: the tests may agree with the code and still fail to protect what users need.</p>
+    <p>You may even have asked it to follow TDD: write a failing test, implement the change, then run the tests. But when the same agent chooses both implementation and expectations, a shared mistaken assumption can make the result feedback, not independent verification.</p>
+    <p>Then comes the diff, implementation and tests line by line. The PR stalls, or you keep reading past the point where you can tell whether the tests still protect the behavior.</p>
+    <p>That’s review exhaustion, not confidence: the tests may agree with the code and still fail to protect what users need.</p>
+    <figure class="article-illustration"><img src="../assets/Pr-fatigue.png" alt="An overwhelmed developer is buried under a flood of AI-generated pull requests."></figure>
 <p>So what should a human review instead?</p>
-<p>Not every changed line. Let an AI review agent scan the implementation and report suspicious changes, missed cases, and likely defects. Treat its findings as leads, not certification; it can share the implementation agent’s assumptions. Then review the <strong>spec tests</strong>: a small set of human-readable checks that say what the system must do, in terms a user or business could recognize. They give us a compact place to review the behavior a change proposes. They can change alongside the implementation; when they do, reviewers should judge the changed behavior as a product decision, not treat it as routine test maintenance.</p>
+<p>Not every changed line. Let an AI review agent flag suspicious changes, missed cases, and likely defects, but treat those findings as leads, not certification. Then review the <strong>spec tests</strong>: a small set of human-readable checks describing what the system must do. They provide a compact view of proposed behavior; changes to them are product decisions, not routine test maintenance.</p>
 <p>That’s when I started asking: <strong>do the review habits and quality checks we’ve spent years building still fit work generated this way? And if they don’t, how should they evolve?</strong></p>
 <p>We automated the implementation, and we kept the verification rituals built for hand-written implementation. That’s bolting a jet engine onto a horse cart and wondering why the ride feels strange.</p>
 <p>So here’s my claim, and I’ll defend it:</p>
 <p><strong>Unit tests aren’t dead because testing died. They’re dead because the unit moved.</strong></p>
 <h2>A test can protect the wrong thing</h2>
-<p>We used to organize much of our confidence around the small pieces we wrote. Now an agent chooses those pieces for a capability and reshapes them in the next pass. Tests tied to methods and mocks can fail when the design changes; worse, the same agent can write implementation and tests from the same mistaken assumption. A green result can tell us the pieces agree, not that they meet the need.</p>
-<p>We built the test pyramid around economics: unit tests were cheap, fast, and easy to diagnose, so we wrote many. AI makes producing tests cheaper. It does not make reviewing rewritten assertions free. The cost has shifted from writing tests to keeping the evidence trustworthy.</p>
-<p>There is a token bill, too. People are rightly looking for ways to use fewer tokens, with tools like RTK and Caveman that compress context and reduce output. But we should also ask what those tokens buy. A single method may need normal, boundary, and failure unit tests, each with setup and assertions. If agents generate all of them from the same assumptions as the implementation, we still have to review them without gaining much confidence. When we target 80% to 90% line coverage mainly through unit tests, the test code could plausibly reach 50% to 200% of production code. That is my rough estimate, not a measured benchmark; coverage says what code ran, not whether the tests are good. The question is whether the tests earn their review and maintenance cost.</p>
+<p>We used to organize confidence around the small pieces we wrote. Now an agent chooses and reshapes those pieces. Tests tied to methods and mocks can break when design changes; worse, implementation and tests can share the same mistaken assumption. A green result may show only that the pieces agree.</p>
+<p>The test pyramid favored unit tests because they were cheap, fast, and easy to diagnose. AI makes them cheaper to produce, not to review. The cost has shifted from writing tests to keeping evidence trustworthy.</p>
+<p>There is a token bill, too. Tools like RTK and Caveman reduce context and output, but ask what those tokens buy. A method may need normal, boundary, and failure tests, each with setup and assertions. If agents generate them from the same assumptions as the implementation, review effort buys little confidence. At 80% to 90% line coverage, unit-test code could plausibly reach 50% to 200% of production code. That is my rough estimate, not a measured benchmark; coverage shows what ran, not whether tests are good. Do the tests earn their review and maintenance cost?</p>
 <h2>What I’m proposing</h2>
-<p>Not a ban on unit tests, but a change in where confidence rests. Generated implementation is easy to reshape; trustworthy evidence is not. Keep tests tied to behavior, and update them when requirements change. The implementation alone should not force us to rewrite what users need.</p>
-<p>Our work shifts with that change. We become spec developers: shaping, challenging, and maintaining the executable descriptions of the behavior we expect, while agents do more of the implementation work. That is not just writing scenarios. It is deciding what matters, what evidence would demonstrate it, and how the specification should evolve when the requirement changes.</p>
+<p>This is not a ban on unit tests, but a shift in where confidence rests. Generated implementation is easy to reshape; trustworthy evidence is not. Keep tests tied to behavior and update them when requirements change.</p>
+<p>We become spec developers, shaping and maintaining executable descriptions of expected behavior while agents do more implementation. That means deciding what matters, what evidence demonstrates it, and how the specification changes with requirements.</p>
 <p>Plain language does not make a spec correct. If it says one reservation succeeds when one item is available but says nothing about two customers arriving at once, the implementation has a blind spot: it may pass every written scenario and still oversell inventory. People must decide which concurrent outcomes, edge cases, and invariants are required; an agent can help propose them, but cannot certify its own interpretation.</p>
 <h2>Complementary evidence, chosen by risk</h2>
 <p>The change is not “run more tests” or follow a fixed sequence. These practices answer different questions and complement one another. Choose the evidence that fits the change and its risks.</p>
@@ -103,9 +108,9 @@
 <p><strong>Assess operational risk.</strong> A payment or data migration may warrant representative load, failure, compatibility, rollout, and rollback checks. A small isolated change may not. This is not a new checklist: choose evidence by the cost of a missed failure. In the conclusion, <a href="../articles/what-our-tests-dont-prove.html">we consider what these checks still cannot prove</a>.</p>
 <h2>Unit tests still matter</h2>
 <p>“Unit tests are dead” is a provocation, not a deletion command.</p>
-<p>A tricky algorithm or security invariant still deserves focused tests. But a simple capability does not need twenty tests guarding private plumbing just because that is what we have always done.</p>
+<p>A tricky algorithm or security invariant still deserves focused tests. A simple capability does not need twenty tests for private plumbing just because it is familiar.</p>
 <p>Choose tests by risk. Not by ritual.</p>
-<p>The smallest useful unit of confidence is not always a method or class. It is the behavior we agreed to protect.</p>
+<p>The smallest useful unit of confidence is the behavior we agreed to protect, not always a method or class.</p>
 <h2>The series</h2>
 <ol>
   <li><strong>Unit Tests Are Dead. The Unit Moved.</strong> (this article)</li>

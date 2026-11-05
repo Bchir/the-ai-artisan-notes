@@ -18,15 +18,17 @@ seriesOrder: 1
 
 You probably asked an AI agent to refactor legacy code. It changed the implementation, rewrote the unit tests, and reported a green build.
 
-You may even have asked it to follow a TDD loop: write a failing test, implement the change, then run the tests. But the same agent chose both the implementation and what the tests should expect, from the same prompt and context, perhaps with the same mistaken assumption. That is feedback, not independent verification.
+You may even have asked it to follow TDD: write a failing test, implement the change, then run the tests. But when the same agent chooses both implementation and expectations, a shared mistaken assumption can make the result feedback, not independent verification.
 
-Then comes the diff: implementation and tests, line by line, file by file. You try to follow it. The PR stalls, or you keep reading past the point where you can tell whether the tests still protect the behavior.
+Then comes the diff, implementation and tests line by line. The PR stalls, or you keep reading past the point where you can tell whether the tests still protect the behavior.
 
 That’s review exhaustion, not confidence: the tests may agree with the code and still fail to protect what users need.
 
+![An overwhelmed developer is buried under a flood of AI-generated pull requests.](../assets/Pr-fatigue.png)
+
 So what should a human review instead?
 
-Not every changed line. Let an AI review agent scan the implementation and report suspicious changes, missed cases, and likely defects. Treat its findings as leads, not certification; it can share the implementation agent’s assumptions. Then review the **spec tests**: a small set of human-readable checks that say what the system must do, in terms a user or business could recognize. They give us a compact place to review the behavior a change proposes. They can change alongside the implementation; when they do, reviewers should judge the changed behavior as a product decision, not treat it as routine test maintenance.
+Not every changed line. Let an AI review agent flag suspicious changes, missed cases, and likely defects, but treat those findings as leads, not certification. Then review the **spec tests**: a small set of human-readable checks describing what the system must do. They provide a compact view of proposed behavior; changes to them are product decisions, not routine test maintenance.
 
 That’s when I started asking: **do the review habits and quality checks we’ve spent years building still fit work generated this way? And if they don’t, how should they evolve?**
 
@@ -38,17 +40,17 @@ So here’s my claim, and I’ll defend it:
 
 ## A test can protect the wrong thing
 
-We used to organize much of our confidence around the small pieces we wrote. Now an agent chooses those pieces for a capability and reshapes them in the next pass. Tests tied to methods and mocks can fail when the design changes; worse, the same agent can write implementation and tests from the same mistaken assumption. A green result can tell us the pieces agree, not that they meet the need.
+We used to organize confidence around the small pieces we wrote. Now an agent chooses and reshapes those pieces. Tests tied to methods and mocks can break when design changes; worse, implementation and tests can share the same mistaken assumption. A green result may show only that the pieces agree.
 
-We built the test pyramid around economics: unit tests were cheap, fast, and easy to diagnose, so we wrote many. AI makes producing tests cheaper. It does not make reviewing rewritten assertions free. The cost has shifted from writing tests to keeping the evidence trustworthy.
+The test pyramid favored unit tests because they were cheap, fast, and easy to diagnose. AI makes them cheaper to produce, not to review. The cost has shifted from writing tests to keeping evidence trustworthy.
 
-There is a token bill, too. People are rightly looking for ways to use fewer tokens, with tools like RTK and Caveman that compress context and reduce output. But we should also ask what those tokens buy. A single method may need normal, boundary, and failure unit tests, each with setup and assertions. If agents generate all of them from the same assumptions as the implementation, we still have to review them without gaining much confidence. When we target 80% to 90% line coverage mainly through unit tests, the test code could plausibly reach 50% to 200% of production code. That is my rough estimate, not a measured benchmark; coverage says what code ran, not whether the tests are good. The question is whether the tests earn their review and maintenance cost.
+There is a token bill, too. Tools like RTK and Caveman reduce context and output, but ask what those tokens buy. A method may need normal, boundary, and failure tests, each with setup and assertions. If agents generate them from the same assumptions as the implementation, review effort buys little confidence. At 80% to 90% line coverage, unit-test code could plausibly reach 50% to 200% of production code. That is my rough estimate, not a measured benchmark; coverage shows what ran, not whether tests are good. Do the tests earn their review and maintenance cost?
 
 ## What I’m proposing
 
-Not a ban on unit tests, but a change in where confidence rests. Generated implementation is easy to reshape; trustworthy evidence is not. Keep tests tied to behavior, and update them when requirements change. The implementation alone should not force us to rewrite what users need.
+This is not a ban on unit tests, but a shift in where confidence rests. Generated implementation is easy to reshape; trustworthy evidence is not. Keep tests tied to behavior and update them when requirements change.
 
-Our work shifts with that change. We become spec developers: shaping, challenging, and maintaining the executable descriptions of the behavior we expect, while agents do more of the implementation work. That is not just writing scenarios. It is deciding what matters, what evidence would demonstrate it, and how the specification should evolve when the requirement changes.
+We become spec developers, shaping and maintaining executable descriptions of expected behavior while agents do more implementation. That means deciding what matters, what evidence demonstrates it, and how the specification changes with requirements.
 
 Plain language does not make a spec correct. If it says one reservation succeeds when one item is available but says nothing about two customers arriving at once, the implementation has a blind spot: it may pass every written scenario and still oversell inventory. People must decide which concurrent outcomes, edge cases, and invariants are required; an agent can help propose them, but cannot certify its own interpretation.
 
@@ -70,11 +72,11 @@ The change is not “run more tests” or follow a fixed sequence. These practic
 
 “Unit tests are dead” is a provocation, not a deletion command.
 
-A tricky algorithm or security invariant still deserves focused tests. But a simple capability does not need twenty tests guarding private plumbing just because that is what we have always done.
+A tricky algorithm or security invariant still deserves focused tests. A simple capability does not need twenty tests for private plumbing just because it is familiar.
 
 Choose tests by risk. Not by ritual.
 
-The smallest useful unit of confidence is not always a method or class. It is the behavior we agreed to protect.
+The smallest useful unit of confidence is the behavior we agreed to protect, not always a method or class.
 
 ## The series
 

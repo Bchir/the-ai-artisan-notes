@@ -53,6 +53,8 @@ That is the feedback loop: the check points to a concern; the agent investigates
 
 The same principle applies beyond a compiler analyzer. A formatter or type checker can block a build; an architecture test can identify a forbidden dependency; a security check can report a vulnerable package. Whatever the tool, its result needs to reach the agent while it can still act on it. The agent should investigate the failure, make a reasoned change, and rerun the gate and relevant tests before handing the work to a reviewer. If a check only appears later in a dashboard or pull-request system, make sure the agent can retrieve it and the team agrees whether it blocks a merge.
 
+![An AI agent responds to a code quality analyzer, iterates, and passes a quality gate.](../assets/Quality-Gate.png)
+
 For a new codebase, the team can start with a strict baseline. In a mature system, apply a rule to changed code first and expand it as existing debt is addressed. Either way, choose gates for the risks they reduce, keep their feedback actionable, and avoid enforcing thresholds for their own sake. A green check is not a design review; it is evidence that the configured boundary passed. Human review still matters. It can focus less on routine violations and more on choices the rules cannot make, while the code is held to a stricter, more consistent baseline.
 
 ## The series
